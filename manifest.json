@@ -1,0 +1,22 @@
+{
+    "manifest_version": 3,
+    "name": "YouTube OnRepeat",
+    "version": "1.0",
+    "description": "Allows users to play YouTube videos on loop indefinitely or for finite time period", 
+    "permissions": ["storage", "activeTab"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://www.youtube.com/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "icons": {
+        "48": "icon.png"
+    }
+}
