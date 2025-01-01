@@ -10,5 +10,14 @@
         * play indefinitely: checkbox 
         * play for finite clock: textbox HRS:MIN (up to 23 hrs 59 min) 
         -->
+        <form>
+            <label for="indefinite">Loop Indefinitely</label>
+            <input type="checkbox" id="indefinite" name="indefinite" value="Yes">
+            <br>
+            <label for="finite">Set Duration (MM:SS) </label>
+            <input type="text" id="finite" name="finite" pattern="[0-9]*:[0-9]*" placeholder="00:00" maxlength="5">
+            <br><br>
+            <button>Save</button>
+        </form>
     </body>
 </html>
