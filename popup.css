@@ -36,9 +36,9 @@ button:active {
     background-color: #fc8585;
 }
 
-/* .countdown {
+.hidden {
     visibility: hidden;
-} */
+}
 .countdown h2 {
     font-size: large;
     padding-top: 20px;
