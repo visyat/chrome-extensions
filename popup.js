@@ -26,13 +26,13 @@ document.addEventListener('DOMContentLoaded', function() {
             countdownInterval = setInterval(() => {
                 if (totalSeconds <= 0) {
                     clearInterval(countdownInterval);
-                    timer.textContent = '00:00';
+                    timer.textContent = 'COUNTDOWN COMPLETE!';
                     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
                         chrome.tabs.sendMessage(tabs[0].id, { action: 'stop' });
                     });
                     return;
                 }
-                timer.textContent = `${String(Math.floor(totalSeconds/60)).padStart(2,'0')}:${String(totalSeconds%60).padStart(2,'0')}`;
+                timer.textContent = `${String(Math.floor(totalSeconds/60)).padStart(2,'0')}:${String(totalSeconds%60).padStart(2,'0')} left in loop ...`;
                 totalSeconds--;
             }, 1000);
 
