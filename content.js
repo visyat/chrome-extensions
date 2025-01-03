@@ -1,5 +1,8 @@
 (function () {
     var in_loop = false
+    document.addEventListener('yt-navigate-finish', function (event) {
+        in_loop = false
+    });
     chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
         if (request.action === 'indefinite') {
             in_loop = true
