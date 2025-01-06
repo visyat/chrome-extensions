@@ -16,13 +16,24 @@
         }
     });
 
+    function compareTimestamps(time1, time2) {
+        const getSeconds = (time) => {
+            const parts = time.split(':');
+            const seconds = parseInt(parts.pop());
+            const minutes = parseInt(parts.pop() || 0);
+            const hours = parseInt(parts.pop() || 0);
+            return hours*3600 + minutes*60 + seconds;
+        };
+        const diff = Math.abs(getSeconds(time1) - getSeconds(time2));
+        return diff === 0 || diff === 1;
+    }
     function checkVideoEnd() {
         if (in_loop) {
             const currentTimeEl = document.querySelector('.ytp-time-current');
             const durationTimeEl = document.querySelector('.ytp-time-duration');
             
             if (currentTimeEl && durationTimeEl) {
-                if (currentTimeEl.textContent === durationTimeEl.textContent) {
+                if (compareTimestamps(currentTimeEl.textContent, durationTimeEl.textContent)) {
                     const playButton = document.querySelector('.ytp-play-button');
                     if (playButton) playButton.click();
                 }
@@ -31,8 +42,3 @@
     }
     setInterval(checkVideoEnd, 1000);
 })();
-
-/*
-* on video end, if timer has not reached zero, restart
-* countdown timer sent back to popup? or maintained separately ...
-*/
