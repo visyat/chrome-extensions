@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "Block YouTube Shorts",
+    "version": "1.0",
+    "description": "Hides YouTube shorts from users' view. When users try to access, redirects to login page.", 
+    "permissions": ["storage", "activeTab"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["*://www.youtube.com/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "icons": {
+        "48": "icon.png"
+    }
+}
