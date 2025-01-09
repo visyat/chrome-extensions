@@ -1,0 +1,3 @@
+# Website Blocker
+
+Built Chrome extension in JavaScript enabling users to block distracting websites. When users attempt to navigate to the banned sites, this extension redirects them to the Google Search Bar. It is easy to add to the list of banned sites in the popup; however, if a user wants to remove (unblock) a site, they will need to solve a Hard-level puzzle in a domain of their choice (e.g. LeetCode problems).

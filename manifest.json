@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "Chrome Website Blocker",
+    "version": "1.0",
+    "description": "Secure website blocker for Chrome; redirects to Google Search Bar when users try to access banned sites. Easy to add banned sites, gives users a Hard LeetCode problem to solve if they want to remove a site :D.", 
+    "permissions": ["storage", "activeTab"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+            "matches": ["http://*/*", "https://*/*"],
+            "js": ["content.js"]
+        }
+    ],
+    "icons": {
+        "48": "icon.png"
+    }
+}
