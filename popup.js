@@ -2,48 +2,58 @@ document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById("form");
     const timer = document.getElementById("timer");
     const countdownDiv = document.querySelector(".countdown");
-    let countdownInterval;
+    
+    // query extension backend to check if timer is running ... 
+    // if so, get current state of timer, print and start incrementing ...
+    
+    var counterState = 0;
+    /*
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+        (async () =>  {
+            const {message, finite_loop, counter} = await chrome.tabs.sendMessage(tabs[0].id, { action: 'query' });
+            if (message === true && finite_loop === true) {
+                countdownDiv.classList.remove("hidden")
+                counterState = counter;
+            }
+        })();
+    });
+    */
+    function incrementCounter() {
+        if (counterState <= 0) {
+            timer.textContent = 'COUNTDOWN COMPLETE!';
+        } else {
+            counterState -= 1;
+            timer.textContent = `${String(Math.floor(counterState/60)).padStart(2,'0')}:${String(counterState%60).padStart(2,'0')} left in loop ...`;
+        }
+    }
 
     form.addEventListener("submit", (e) => {
         e.preventDefault()
         const formData = new FormData (form)
-        if (countdownInterval) {
-            clearInterval(countdownInterval);
-        }
         if (formData.has("indefinite")) {
-            console.log("INDEFINITE!")
             countdownDiv.classList.add("hidden")
             chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
                 chrome.tabs.sendMessage(tabs[0].id, { action: 'indefinite' });
             });
         } else {
-            console.log(`FINITE: ${formData.get("finite")}!`)
-            
+            /*
+                UPDATED COUNTDOWN LOGIC ...
+                1. on form submit, send # of seconds to extension, so it can independently maintain countdown state
+                2. on popup load, query extension for countdown state so it can start printing
+                3. extension uses independent counter to determine when to stop loop
+            */
+
             const [minutes, seconds] = formData.get("finite").split(':').map(Number);
             let totalSeconds = (minutes*60)+seconds;
+            
+            chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+                chrome.tabs.sendMessage(tabs[0].id, { action: 'finite', data: totalSeconds });
+            });
             countdownDiv.classList.remove("hidden")
 
-            countdownInterval = setInterval(() => {
-                if (totalSeconds <= 0) {
-                    clearInterval(countdownInterval);
-                    timer.textContent = 'COUNTDOWN COMPLETE!';
-                    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-                        chrome.tabs.sendMessage(tabs[0].id, { action: 'stop' });
-                    });
-                    return;
-                }
-                timer.textContent = `${String(Math.floor(totalSeconds/60)).padStart(2,'0')}:${String(totalSeconds%60).padStart(2,'0')} left in loop ...`;
-                totalSeconds--;
-            }, 1000);
-
-            chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, { action: 'finite', data: formData.get("finite") });
-            });
+            // reset timer and start incrementing ...
+            counterState = totalSeconds;
         }
-    }) 
+    });
+    setInterval(incrementCounter, 1000);
 });
-
-/*
-ADD COUNTDOWN LOGIC ... parse finite text data and begin countdown 
-make countdown element in popup.html visible and update printed val every second ...
-*/
