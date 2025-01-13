@@ -5,19 +5,20 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // query extension backend to check if timer is running ... 
     // if so, get current state of timer, print and start incrementing ...
-    
     var counterState = 0;
-    /*
+    timer.textContent = '';
+
     chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
         (async () =>  {
-            const {message, finite_loop, counter} = await chrome.tabs.sendMessage(tabs[0].id, { action: 'query' });
-            if (message === true && finite_loop === true) {
-                countdownDiv.classList.remove("hidden")
-                counterState = counter;
+            const { message, loop_finite, data } = await chrome.tabs.sendMessage(tabs[0].id, { action: 'query' });
+            if (message === true) {
+                if (loop_finite === true) {
+                    countdownDiv.classList.remove("hidden")
+                    counterState = data;
+                }
             }
         })();
     });
-    */
     function incrementCounter() {
         if (counterState <= 0) {
             timer.textContent = 'COUNTDOWN COMPLETE!';
@@ -36,19 +37,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 chrome.tabs.sendMessage(tabs[0].id, { action: 'indefinite' });
             });
         } else {
-            /*
-                UPDATED COUNTDOWN LOGIC ...
-                1. on form submit, send # of seconds to extension, so it can independently maintain countdown state
-                2. on popup load, query extension for countdown state so it can start printing
-                3. extension uses independent counter to determine when to stop loop
-            */
-
             const [minutes, seconds] = formData.get("finite").split(':').map(Number);
             let totalSeconds = (minutes*60)+seconds;
             
             chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
                 chrome.tabs.sendMessage(tabs[0].id, { action: 'finite', data: totalSeconds });
             });
+            timer.textContent = '';
             countdownDiv.classList.remove("hidden")
 
             // reset timer and start incrementing ...

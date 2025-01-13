@@ -16,13 +16,10 @@
             finite_loop = true
             countdown = request.data;
             sendResponse({ message: 'Current Video will Loop for the Stated Time Period ...' });
-        } 
-        /*
-        else if (request.action === 'query') {
+        } else if (request.action === 'query') {
             // popup queries extension for current state on load ...
             sendResponse({ message: in_loop, loop_finite: finite_loop, data: countdown });
         }
-        */
     });
 
     function compareTimestamps(time1, time2) {
@@ -40,8 +37,13 @@
         if (in_loop) {
             // increment counter (if needed) ...
             if (finite_loop) {
-                if (countdown <= 0) in_loop = false;
-                else countdown -= 1;
+                if (countdown <= 0) { 
+                    in_loop = false;
+                    finite_loop = false;
+                }
+                else {
+                    countdown -= 1;
+                }
             }
             
             // check if video end and restart ...
