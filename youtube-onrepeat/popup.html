@@ -15,13 +15,13 @@
             <input type="checkbox" id="indefinite" name="indefinite" value="Yes">
             <br>
             <label for="finite">Set Duration (HH:MM:SS) </label>
-            <input type="text" id="finite" name="finite" pattern="([0-5][0-9]:[0-5][0-9])|([01][0-9]:[0-5][0-9]:[0-5][0-9])" placeholder="00:00" maxlength="5">
+            <input type="text" id="finite" name="finite" pattern="([0-5][0-9]:[0-5][0-9])|([01][0-9]:[0-5][0-9]:[0-5][0-9])" placeholder="00:00" maxlength="8">
             <br><br>
-            <h3>Loop For Duration</h3>
+            <h3>Loop Between Timestamps</h3>
             <p>(HH:MM:SS - HH:MM:SS)</p>
-            <input type="text" id="finite" name="finite" pattern="([0-5][0-9]:[0-5][0-9])|([01][0-9]:[0-5][0-9]:[0-5][0-9])" placeholder="00:00" maxlength="5">
+            <input type="text" id="duration_from" name="duration_from" pattern="([0-5][0-9]:[0-5][0-9])|([01][0-9]:[0-5][0-9]:[0-5][0-9])" placeholder="00:00" maxlength="8">
             -
-            <input type="text" id="finite" name="finite" pattern="([0-5][0-9]:[0-5][0-9])|([01][0-9]:[0-5][0-9]:[0-5][0-9])" placeholder="00:00" maxlength="5">
+            <input type="text" id="duration_to" name="duration_to" pattern="([0-5][0-9]:[0-5][0-9])|([01][0-9]:[0-5][0-9]:[0-5][0-9])" placeholder="00:00" maxlength="8">
             <br><br>
             <button value="save">Save</button>
         </form>

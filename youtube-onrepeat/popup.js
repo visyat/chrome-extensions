@@ -33,23 +33,38 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function parseTimestamp(str) {
+        const [minutes, seconds] = str.split(':').map(Number);
+        let totalSeconds = (minutes*60)+seconds;
+        return totalSeconds;
+    }
+
     form.addEventListener("submit", (e) => {
         e.preventDefault()
         const formData = new FormData (form)
+
+        let duration_from = 0;
+        let duration_to = 0;
+        if (formData.has("duration_from")) {
+            duration_from = parseTimestamp(formData.get("duration_from"));
+        }
+        if (formData.has("duration_to")) {
+            duration_to = parseTimestamp(formData.get("duration_to"));
+        }
+
         if (formData.has("indefinite")) {
             chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, { action: 'indefinite' });
+                chrome.tabs.sendMessage(tabs[0].id, { action: 'indefinite', lower_b: duration_from, upper_b: duration_to });
             });
             timer.textContent = '';
             countdownDiv.classList.remove("hidden")
 
             counterState = -1;
         } else {
-            const [minutes, seconds] = formData.get("finite").split(':').map(Number);
-            let totalSeconds = (minutes*60)+seconds;
+            let totalSeconds = parseTimestamp(formData.get("finite"));
             
             chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-                chrome.tabs.sendMessage(tabs[0].id, { action: 'finite', data: totalSeconds });
+                chrome.tabs.sendMessage(tabs[0].id, { action: 'finite', data: totalSeconds, lower_b: duration_from, upper_b: duration_to });
             });
             timer.textContent = '';
             countdownDiv.classList.remove("hidden")
